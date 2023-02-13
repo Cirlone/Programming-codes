@@ -1,0 +1,32 @@
+#include <iostream>
+#include <fstream>
+using namespace std;
+ifstream fin("maximpar.in");
+ofstream fout("maximpar.out");
+int n,x,Max,k;
+int main()
+{
+    fin>>n;
+    k=0;
+    Max=0;
+    while(n!=0)
+    {
+        fin>>x;
+       if(x%2==0)
+           if(x>Max){
+              Max=x;
+              k=1;
+             }
+           else
+                if(x==Max)
+                   k++;
+    n--;
+    }
+ if(k!=0)   
+    fout<<Max<<' '<<k;
+ else
+     fout<<-1;
+     
+return 0;
+}
+    
