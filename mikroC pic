@@ -1,0 +1,19 @@
+char cnt;
+char kk;
+
+void main(void){
+  ADCON1 |= 0x0F;                         // Configure all ports with analog function as digital
+  CMCON  |= 7;                            // Disable comparators
+
+  HID_Enable(&readbuff,&writebuff);       // Enable HID communication
+  
+  while(1){                               // USB servicing is done inside the while loop
+    USB_Polling_Proc();                   // Call this routine periodically
+    kk = HID_Read();
+    if(kk != 0){
+      for(cnt=0;cnt<64;cnt++)
+        writebuff[cnt]=readbuff[cnt];
+      HID_Write(&writebuff,64);
+    }
+  }
+}
