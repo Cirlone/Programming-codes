@@ -1,0 +1,38 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <vector>
+
+int main(int argc, char* argv[]) {
+    // Open the input file
+    std::ifstream inputFile(argv[1]);
+
+    // Read in the minimum and maximum sentence length
+    int min, max;
+    std::cin >> min >> max;
+
+    // Read in the entire file into a string
+    std::string fileContents((std::istreambuf_iterator<char>(inputFile)),
+                             std::istreambuf_iterator<char>());
+
+    // Split the string into sentences
+    std::vector<std::string> sentences;
+    std::string currentSentence = "";
+    for (char c : fileContents) {
+        currentSentence += c;
+        if (c == '.' || c == '?' || c == '!') {
+            sentences.push_back(currentSentence);
+            currentSentence = "";
+        }
+    }
+
+    // Print out all sentences with length between min and max
+    for (const std::string& sentence : sentences) {
+        int length = sentence.length();
+        if (length >= min && length <= max) {
+            std::cout << sentence << std::endl;
+        }
+    }
+
+    return 0;
+}
