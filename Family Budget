@@ -1,0 +1,131 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <map>
+#include <algorithm>
+#include <limits.h>
+
+using namespace std;
+
+class FamilyMember {
+    public:
+        FamilyMember(string name) : name(name) {}
+
+        void addIncome(double amount) {
+            income += amount;
+        }
+
+        void addExpense(double amount) {
+            expenses += amount;
+        }
+
+        double getRemainingBudget(double budgetLimit) {
+            return budgetLimit - expenses;
+        }
+
+        string name;
+        double income = 0;
+        double expenses = 0;
+};
+
+class BudgetManager {
+    public:
+        BudgetManager(double monthlyLimit) : monthlyLimit(monthlyLimit) {}
+
+        void addFamilyMember(string name) {
+            familyMembers[name] = FamilyMember(name);
+        }
+
+        void addIncome(string name, double amount) {
+            familyMembers[name].addIncome(amount);
+        }
+
+        void addExpense(string name, double amount) {
+            familyMembers[name].addExpense(amount);
+        }
+
+        void printMemberReport(string name) {
+            FamilyMember member = familyMembers[name];
+            double remainingBudget = member.getRemainingBudget(monthlyLimit);
+            cout << "Member: " << name << endl;
+            cout << "Income: " << member.income << endl;
+            cout << "Expenses: " << member.expenses << endl;
+            cout << "Remaining Budget: " << remainingBudget << endl;
+        }
+
+        void printFamilyReport() {
+            double totalIncome = 0;
+            double totalExpenses = 0;
+            double highestExpense = INT_MIN;
+            double lowestExpense = INT_MAX;
+            for (auto member : familyMembers) {
+                totalIncome += member.second.income;
+                totalExpenses += member.second.expenses;
+                highestExpense = max(highestExpense, member.second.expenses);
+                lowestExpense = min(lowestExpense, member.second.expenses);
+            }
+            cout << "Total Income: " << totalIncome << endl;
+            cout << "Total Expenses: " << totalExpenses << endl;
+            cout << "Highest Expense: " << highestExpense << endl;
+            cout << "Lowest Expense: " << lowestExpense << endl;
+        }
+
+        double monthlyLimit;
+        map<string, FamilyMember> familyMembers;
+};
+
+int main() {
+    int numFamilyMembers;
+    double monthlyLimit;
+
+    cout << "Enter number of family members: ";
+    cin >> numFamilyMembers;
+
+    cout << "Enter monthly spending limit: ";
+    cin >> monthlyLimit;
+
+    BudgetManager budgetManager(monthlyLimit);
+
+    cout << "Enter names of family members: " << endl;
+    for (int i = 0; i < numFamilyMembers; i++) {
+        string name;
+        cin >> name;
+        budgetManager.addFamilyMember(name);
+    }
+
+    while (true) {
+           cout << "Enter 1 to add income, 2 to add expense, 3 to view member report, 4 to view family report, 5 to exit: ";
+        int choice;
+        cin >> choice;
+
+        if (choice == 1) {
+            string name;
+            double amount;
+            cout << "Enter name: ";
+            cin >> name;
+            cout << "Enter amount: ";
+            cin >> amount;
+            budgetManager.addIncome(name, amount);
+        } else if (choice == 2) {
+            string name;
+            double amount;
+            cout << "Enter name: ";
+            cin >> name;
+            cout << "Enter amount: ";
+            cin >> amount;
+            budgetManager.addExpense(name, amount);
+        } else if (choice == 3) {
+            string name;
+            cout << "Enter name: ";
+            cin >> name;
+            budgetManager.printMemberReport(name);
+        } else if (choice == 4) {
+            budgetManager.printFamilyReport();
+        } else if (choice == 5) {
+            break;
+        }
+    }
+
+    return 0;
+}
+
