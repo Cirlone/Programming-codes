@@ -1,0 +1,20 @@
+#include <iostream>
+using namespace std;
+void nr_div_imp(int n,int &x)
+{
+    int nr=0;
+    int i;
+    for(i=1;i*i<n;i++)
+        if(n%i==0)
+    {
+        if(i%2==1)
+            nr++;
+        if(n/i%2==1)
+            nr++;
+    }
+    if(i*i==n)
+        if(i%2==1)
+               nr++;
+        x=nr;
+}
+   
