@@ -1,0 +1,42 @@
+#include <fstream>
+#include<climits>
+using namespace std;
+ifstream fin("exponent.in");
+ofstream fout("exponent.out");
+int n,a,nr,sol,d,x;
+int n_factorial(int n, int d){
+int nr=0,i,p;
+p=d;
+ while(p<=n){
+      nr=nr+n/p;
+      p=p*d;
+  }
+  return nr;
+}
+
+int main()
+{
+fin>>n>>a;
+sol=INT_MAX;
+for(d=2;d*d<=a;d++)
+  if(a%d==0){
+    nr=0;
+    while(a%d==0)
+    {
+        a=a/d;
+        nr++;
+    }
+    x=n_factorial(n,d); 
+    if(sol>x/nr)
+        sol=x/nr;
+}
+if(a!=1) 
+{
+    nr=1;
+    x=n_factorial(n,a);
+     if(sol>x/nr)
+        sol=x/nr;
+}
+fout<<sol;
+    return 0;
+}
