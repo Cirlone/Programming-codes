@@ -1,0 +1,85 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+
+using namespace std;
+
+const int N = 105;
+const int INF = 0x3f3f3f3f;
+
+int n, m, s, t;
+int e[N][N], f[N][N], h[N], ptr[N];
+vector<int> g[N];
+
+bool bfs()
+{
+    memset(h, -1, sizeof h);
+    queue<int> q;
+    q.push(s);
+    h[s] = 0;
+    while (q.size() && h[t] == -1)
+    {
+        int v = q.front();
+        q.pop();
+        for (int i = 0; i < g[v].size(); i++)
+        {
+            int u = g[v][i];
+            if (h[u] == -1 && f[v][u] < e[v][u])
+            {
+                h[u] = h[v] + 1;
+                q.push(u);
+            }
+        }
+    }
+    return h[t] != -1;
+}
+
+int dfs(int v, int flow)
+{
+    if (!flow)
+        return 0;
+    if (v == t)
+        return flow;
+    for (int &i = ptr[v]; i < g[v].size(); i++)
+    {
+        int u = g[v][i];
+        if (h[u] == h[v] + 1 && f[v][u] < e[v][u])
+        {
+            int t = dfs(u, min(flow, e[v][u] - f[v][u]));
+            if (t)
+            {
+                f[v][u] += t;
+                f[u][v] -= t;
+                return t;
+            }
+        }
+    }
+    return 0;
+}
+
+int dinic()
+{
+    int flow = 0, add;
+    while (bfs())
+    {
+        memset(ptr, 0, sizeof ptr);
+        while (add = dfs(s, INF))
+            flow += add;
+    }
+    return flow;
+}
+
+int main()
+{
+    cin >> n >> m >> s >> t;
+    for (int i = 0; i < m; i++)
+    {
+        int x, y, c;
+        cin >> x >> y >> c;
+        g[x].push_back(y);
+        g[y].push_back(x);
+        e[x][y] += c;
+    }
+    cout << dinic() << endl;
+    return 0;
+}
