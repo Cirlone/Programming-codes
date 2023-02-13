@@ -1,0 +1,37 @@
+#include <fstream>
+using namespace std;
+ifstream fin("hanoi.in");
+ofstream fout("hanoi.out");
+char A='A',B='B',C='C';
+int n,m,i;
+char mutare[1000000][6];
+void h(int n,char A,char B,char C)
+{
+    if(n==1)
+    {
+        m++;
+        mutare[m][0]=A;
+        mutare[m][1]='-';
+        mutare[m][2]='>';
+        mutare[m][3]=C;
+    }
+    else
+    {
+        h(n-1,A,C,B);
+        m++;
+        mutare[m][0]=A;
+        mutare[m][1]='-';
+        mutare[m][2]='>';
+        mutare[m][3]=C;
+         h(n-1,B,A,C);
+    }
+}
+int main()
+{
+    fin>>n;
+    h(n,A,B,C);
+    fout<<m<<'\n';
+    for(i=1;i<=m;i++)
+        fout<<mutare[i]<<'\n';
+    return 0;
+}
